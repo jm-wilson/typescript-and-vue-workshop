@@ -1,15 +1,23 @@
-<script>
-import NewDishForm from '../components/NewDishForm.vue'
+<script lang="ts">
+import type { Dish } from '@/types'
+import { defineComponent } from 'vue'
 import DishCard from '../components/DishCard.vue'
+import NewDishForm from '../components/NewDishForm.vue'
 import SideMenu from '../components/SideMenu.vue'
 
-export default {
+type DataShape = {
+  filterText: string
+  dishList: Dish[]
+  showNewForm: boolean
+}
+
+export default defineComponent({
   components: {
     NewDishForm,
     DishCard,
     SideMenu,
   },
-  data: () => ({
+  data: (): DataShape => ({
     filterText: '',
     dishList: [
       {
@@ -31,7 +39,7 @@ export default {
     showNewForm: false,
   }),
   computed: {
-    filteredDishList() {
+    filteredDishList(): Dish[] {
       return this.dishList.filter((dish) => {
         if (dish.name) {
           return dish.name.toLowerCase().includes(this.filterText.toLowerCase())
@@ -45,11 +53,11 @@ export default {
     },
   },
   methods: {
-    addDish(payload) {
+    addDish(payload: Dish) {
       this.dishList.push(payload)
       this.hideForm()
     },
-    deleteDish(payload) {
+    deleteDish(payload: Dish) {
       this.dishList = this.dishList.filter((dish) => {
         return dish.id !== payload.id
       })
@@ -64,7 +72,7 @@ export default {
       this.showNewForm = true
     }
   },
-}
+})
 </script>
 
 <template>

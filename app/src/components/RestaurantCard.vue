@@ -1,13 +1,6 @@
 <script lang="ts">
+import type { Restaurant } from '@/types'
 import { defineComponent, type PropType } from 'vue'
-
-type Restaurant = {
-  id: string
-  name: string
-  address: string
-  website: string
-  status: string
-}
 
 export default defineComponent({
   props: {
@@ -36,7 +29,7 @@ export default defineComponent({
       this.$emit('delete-restaurant', this.restaurant)
     },
   },
-});
+})
 </script>
 
 <template>
