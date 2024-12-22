@@ -1,6 +1,13 @@
-<script>
-export default {
-  props: ['tagline'],
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  props: {
+    tagline: {
+      type: String,
+      default: "Track the stuff you eat!",
+    }
+  },
   data: () => ({
     navList: [
       {
@@ -17,7 +24,7 @@ export default {
       },
     ],
   }),
-}
+});
 </script>
 
 <template>
