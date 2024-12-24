@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" setup>
 import type { Dish } from '@/types'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -6,77 +6,57 @@ import DishCard from '../components/DishCard.vue'
 import NewDishForm from '../components/NewDishForm.vue'
 import SideMenu from '../components/SideMenu.vue'
 
-export default defineComponent({
-  components: {
-    NewDishForm,
-    DishCard,
-    SideMenu,
+const dishList = ref([
+  {
+    id: '7d9f3f17-964a-4e82-98e5-ecbba4d709a1',
+    name: 'Ghost Pepper Poppers',
+    status: 'Want to Try',
   },
-  setup() {
-    const dishList = ref([
-      {
-        id: '7d9f3f17-964a-4e82-98e5-ecbba4d709a1',
-        name: 'Ghost Pepper Poppers',
-        status: 'Want to Try',
-      },
-      {
-        id: '5c986b74-fa02-4a22-98f2-b1ff3559e85e',
-        name: 'A Little More Chowder Now',
-        status: 'Recommended',
-      },
-      {
-        id: 'c113411d-1589-414f-a283-daf7eedb631e',
-        name: 'Full Laptop Battery',
-        status: 'Do Not Recommend',
-      },
-    ])
-
-    const filterText = ref('')
-    const filteredDishList = computed((): Dish[] => {
-      return dishList.value.filter((dish) => {
-        if (dish.name) {
-          return dish.name.toLowerCase().includes(filterText.value.toLowerCase())
-        } else {
-          return dishList.value
-        }
-      })
-    })
-
-    const numberOfDishes = computed(() => filteredDishList.value.length)
-
-    const addDish = (payload: Dish) => {
-      dishList.value.push(payload)
-      hideForm()
-    }
-    const deleteDish = (payload: Dish) => {
-      dishList.value = dishList.value.filter((dish) => {
-        return dish.id !== payload.id
-      })
-    }
-
-    const showNewForm = ref(false)
-    const hideForm = () => {
-      showNewForm.value = false
-    }
-
-    onMounted(() => {
-      const route = useRoute()
-      if (route.query.new) {
-        showNewForm.value = true
-      }
-    })
-
-    return {
-      dishList,
-      filterText,
-      filteredDishList,
-      numberOfDishes,
-      addDish,
-      deleteDish,
-      showNewForm,
-      hideForm,
-    }
+  {
+    id: '5c986b74-fa02-4a22-98f2-b1ff3559e85e',
+    name: 'A Little More Chowder Now',
+    status: 'Recommended',
   },
+  {
+    id: 'c113411d-1589-414f-a283-daf7eedb631e',
+    name: 'Full Laptop Battery',
+    status: 'Do Not Recommend',
+  },
+])
+
+const filterText = ref('')
+const filteredDishList = computed((): Dish[] => {
+  return dishList.value.filter((dish) => {
+    if (dish.name) {
+      return dish.name.toLowerCase().includes(filterText.value.toLowerCase())
+    } else {
+      return dishList.value
+    }
+  })
+})
+
+const numberOfDishes = computed(() => filteredDishList.value.length)
+
+const addDish = (payload: Dish) => {
+  dishList.value.push(payload)
+  hideForm()
+}
+const deleteDish = (payload: Dish) => {
+  dishList.value = dishList.value.filter((dish) => {
+    return dish.id !== payload.id
+  })
+}
+
+const showNewForm = ref(false)
+const hideForm = () => {
+  showNewForm.value = false
+}
+
+onMounted(() => {
+  const route = useRoute()
+  if (route.query.new) {
+    showNewForm.value = true
+  }
 })
 </script>
 
