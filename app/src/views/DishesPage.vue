@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { Dish } from '@/types'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DishCard from '../components/DishCard.vue'
 import NewDishForm from '../components/NewDishForm.vue'
 import SideMenu from '../components/SideMenu.vue'
 
-const dishList = ref([
+const dishList = ref<Dish[]>([
   {
     id: '7d9f3f17-964a-4e82-98e5-ecbba4d709a1',
     name: 'Ghost Pepper Poppers',
