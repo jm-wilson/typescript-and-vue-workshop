@@ -1,30 +1,26 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue'
 
-export default defineComponent({
-  props: {
-    tagline: {
-      type: String,
-      default: "Track the stuff you eat!",
-    }
+type Props = {
+  tagline: string
+}
+
+const { tagline = 'Track the stuff you eat!' } = defineProps<Props>()
+
+const navList = ref([
+  {
+    name: 'Home',
+    path: '/',
   },
-  data: () => ({
-    navList: [
-      {
-        name: 'Home',
-        path: '/',
-      },
-      {
-        name: 'Restaurants',
-        path: '/restaurants',
-      },
-      {
-        name: 'Dishes',
-        path: '/dishes',
-      },
-    ],
-  }),
-});
+  {
+    name: 'Restaurants',
+    path: '/restaurants',
+  },
+  {
+    name: 'Dishes',
+    path: '/dishes',
+  },
+])
 </script>
 
 <template>
