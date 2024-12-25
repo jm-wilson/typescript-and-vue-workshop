@@ -10,7 +10,7 @@ import SideMenu from '../components/SideMenu.vue'
 const dishStore = useDishStore()
 
 const filterText = ref('')
-const updateFilterText = (event: InputEvent) => {
+const updateFilterText = (event: KeyboardEvent) => {
   if (event.target instanceof HTMLInputElement) {
     filterText.value = event.target.value
   }
