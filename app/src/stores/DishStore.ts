@@ -37,5 +37,11 @@ export const useDishStore = defineStore('DishStore', {
         return dish.id !== payload.id
       })
     },
+    updateDish(payload: Dish) {
+      const index = this.list.findIndex(dish => dish.id === payload.id);
+      if (index > -1) {
+        this.list[index] = payload;
+      }
+    }
   },
 })
