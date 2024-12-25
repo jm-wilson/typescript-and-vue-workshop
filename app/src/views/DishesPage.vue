@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router'
 import DishCard from '../components/DishCard.vue'
 import NewDishForm from '../components/NewDishForm.vue'
 import SideMenu from '../components/SideMenu.vue'
+import EditDishForm from '@/components/EditDishForm.vue'
 
 const dishStore = useDishStore()
 
@@ -28,20 +29,45 @@ const filteredDishList = computed((): Dish[] => {
 
 const numberOfDishes = computed(() => filteredDishList.value.length)
 
-const addDish = (payload: Dish) => {
-  dishStore.addDish(payload)
-  hideForm()
+type ShowFormState = 'none' | 'new' | 'edit'
+const showForm = ref<ShowFormState>('none')
+const noFormShown = computed(() => showForm.value === 'none')
+const showNewForm = computed(() => showForm.value === 'new')
+const showEditForm = computed(() => showForm.value === 'edit')
+const editingDish = ref<Dish | null>(null)
+
+/** Launches form to edit a dish */
+const editDish = (dish: Dish) => {
+  editingDish.value = dish
+  showForm.value = 'edit'
 }
 
-const showNewForm = ref(false)
+/** Saves the dish being edited */
+const updateDish = (payload: Dish) => {
+  dishStore.updateDish(payload)
+  editingDish.value = null
+  showForm.value = 'none'
+}
+
+/** Launches form to create a dish */
+const createDish = () => {
+  showForm.value = 'new'
+}
+
+/** Saves the dish being added */
+const addDish = (payload: Dish) => {
+  dishStore.addDish(payload)
+  showForm.value = 'none'
+}
+
 const hideForm = () => {
-  showNewForm.value = false
+  showForm.value = 'none'
 }
 
 onMounted(() => {
   const route = useRoute()
   if (route.query.new) {
-    showNewForm.value = true
+    showForm.value = 'new'
   }
 })
 </script>
@@ -57,7 +83,7 @@ onMounted(() => {
         <h1 class="title">Dishes</h1>
 
         <!-- CTA Bar -->
-        <nav v-if="!showNewForm" class="level">
+        <nav v-if="noFormShown" class="level">
           <div class="level-left">
             <div class="level-item">
               <p class="subtitle is-5">
@@ -66,7 +92,7 @@ onMounted(() => {
             </div>
 
             <p class="level-item">
-              <button @click="showNewForm = true" class="button is-success">New</button>
+              <button @click="createDish" class="button is-success">New</button>
             </p>
 
             <div class="level-item is-hidden-tablet-only">
@@ -85,10 +111,17 @@ onMounted(() => {
         <!-- New Dish Form -->
         <NewDishForm v-if="showNewForm" @add-new-dish="addDish" @cancel-new-dish="hideForm" />
 
+        <EditDishForm
+          v-if="showEditForm && editingDish"
+          :dish="editingDish"
+          @update-dish="updateDish"
+          @cancel-edit-dish="hideForm"
+        />
+
         <!-- Display Results -->
         <div v-else class="columns is-multiline">
           <div v-for="item in filteredDishList" class="column is-full" :key="`item-${item}`">
-            <DishCard :dish="item" @delete-dish="dishStore.deleteDish" />
+            <DishCard :dish="item" @edit-dish="editDish" @delete-dish="dishStore.deleteDish" />
           </div>
         </div>
       </div>
