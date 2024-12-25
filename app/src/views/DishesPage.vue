@@ -25,6 +25,12 @@ const dishList = ref<Dish[]>([
 ])
 
 const filterText = ref('')
+const updateFilterText = (event: InputEvent) => {
+  if (event.target instanceof HTMLInputElement) {
+    filterText.value = event.target.value
+  }
+}
+
 const filteredDishList = computed((): Dish[] => {
   return dishList.value.filter((dish) => {
     if (dish.name) {
@@ -86,7 +92,7 @@ onMounted(() => {
             <div class="level-item is-hidden-tablet-only">
               <div class="field has-addons">
                 <p class="control">
-                  <input class="input" type="text" placeholder="Dish name" v-model="filterText" />
+                  <input class="input" type="text" placeholder="Dish name" @keyup.enter="updateFilterText" />
                 </p>
                 <p class="control">
                   <button class="button">Search</button>
